@@ -1,0 +1,45 @@
+---
+import Links from "@components/interactive/links";
+import Link from "@components/link.astro";
+import PageLayout from "@layouts/PageLayout.astro";
+import { Capitalize, GroupArrayByValues } from "@utils";
+import { examples, exampleNames, exampleTags } from "@utils/example";
+
+export const prerender = true;
+---
+
+<PageLayout
+    title="How's It - Examples"
+    desc="View different examples of implementations"
+    excludeMain={true}
+>
+    <main>
+        <h1 class="text-3xl font-bold">Examples</h1>
+        <p>
+            These have implementations for different common use cases in apps,
+            to show you an easy direct comparision!
+        </p>
+        <p class="mt-2">
+            If you want to go over the difference in rendering techniques,
+            runtimes, etc, go to <Link href="/learn">Learn</Link> page.
+        </p>
+    </main>
+    <Links
+        client:load
+        placeholder="Fetch, etc"
+        tags={GroupArrayByValues([...exampleTags])
+            .sort((a, b) => b.count - a.count)
+            .map((a) => ({
+                label: `${a.value} (${a.count})`,
+                value: a.value,
+            }))}
+        examples={exampleNames.map((e, i) => ({
+            label: `${i + 1}. ${
+                examples[e].name ? examples[e].name : Capitalize(e)
+            }`,
+            href: `/examples/${e}`,
+            desc: examples[e].shortDesc,
+            tags: examples[e].tags,
+        }))}
+    />
+</PageLayout>

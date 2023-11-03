@@ -1,0 +1,17 @@
+<script>
+    let vanillaCounterAmount = 0;
+    function vanilla_counter_decrement() {
+        const counter = document.querySelector("#vanilla-counter");
+        vanillaCounterAmount--;
+        counter.innerHTML = vanillaCounterAmount;
+    }
+    function vanilla_counter_increment() {
+        const counter = document.querySelector("#vanilla-counter");
+        vanillaCounterAmount++;
+        counter.innerHTML = vanillaCounterAmount;
+    }
+</script>
+
+<button onclick="vanilla_counter_decrement()">-</button>
+<span id="vanilla-counter">0</span>
+<button onclick="vanilla_counter_increment()">+</button>

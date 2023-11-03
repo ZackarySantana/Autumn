@@ -1,0 +1,15 @@
+# Deployment files
+
+fly.toml
+Dockerfile
+.dockerignore
+
+# Local development files
+
+target
+
+# Misc
+
+.env
+.gitignore
+README.md

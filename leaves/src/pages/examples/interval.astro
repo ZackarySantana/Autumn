@@ -1,0 +1,144 @@
+---
+import Card from "@components/card.astro";
+import ExampleLayout from "@layouts/ExampleLayout.astro";
+
+import Alpine from "@examples/alpinejs/interval.html";
+import PreactHooks from "@examples/preact/interval_hooks";
+import PreactSignals from "@examples/preact/interval_signals";
+import HTMXGo from "@htmx/interval_go.html";
+import HTMXRust from "@htmx/interval_rust.html";
+import HTMXlibraryScript from "@htmx/interval_typescript.html";
+import Lit from "@lit/interval";
+import React from "@react/interval";
+import Solid from "@solid/interval";
+import Svelte from "@svelte/interval.svelte";
+import { examples } from "@utils/example";
+import Vanilla from "@vanilla/interval.html";
+import Vue from "@vue/interval.vue";
+
+const example = "interval";
+const desc = examples[example].desc;
+Astro.locals.example = example;
+Astro.locals.desc = desc;
+
+export const prerender = true;
+---
+
+<ExampleLayout>
+    <div slot="header">
+        <h1 class="text-3xl font-bold capitalize">
+            {example} Example
+        </h1>
+        <p>{desc}</p>
+    </div>
+    <Card library="vanilla">
+        <Vanilla />
+    </Card>
+    <Card library="react">
+        <React slot="ssr" />
+        <React
+            slot="ch"
+            client:load
+        />
+        <React
+            slot="co"
+            client:only="react"
+        />
+    </Card>
+    <Card library="solid">
+        <Solid slot="ssr" />
+        <Solid
+            slot="ch"
+            client:load
+        />
+        <Solid
+            slot="co"
+            client:only="solid"
+        />
+    </Card>
+    <Card
+        library="preact"
+        variant="hooks"
+    >
+        <PreactHooks slot="ssr" />
+        <PreactHooks
+            slot="ch"
+            client:load
+        />
+        <PreactHooks
+            slot="co"
+            client:only="preact"
+        />
+    </Card>
+    <Card
+        library="preact"
+        variant="signals"
+    >
+        <PreactSignals slot="ssr" />
+        <PreactSignals
+            slot="ch"
+            client:load
+        />
+        <PreactSignals
+            slot="co"
+            client:only="preact"
+        />
+    </Card>
+    <Card library="svelte">
+        <Svelte slot="ssr" />
+        <Svelte
+            slot="ch"
+            client:load
+        />
+        <Svelte
+            slot="co"
+            client:only="svelte"
+        />
+    </Card>
+    <Card library="vue">
+        <Vue slot="ssr" />
+        <Vue
+            slot="ch"
+            client:load
+        />
+        <Vue
+            slot="co"
+            client:only="vue"
+        />
+    </Card>
+    <Card
+        library="htmx"
+        lang="libraryscript"
+    >
+        <HTMXlibraryScript />
+    </Card>
+    <Card
+        library="htmx"
+        lang="rust"
+    >
+        <HTMXRust />
+    </Card>
+    <Card
+        library="htmx"
+        lang="go"
+    >
+        <HTMXGo />
+    </Card>
+    <Card library="alpinejs">
+        <Alpine />
+    </Card>
+    <Card
+        library="lit"
+        variant="broken"
+    >
+        <Lit slot="ssr" />
+        <Lit
+            slot="ch"
+            client:load
+        />
+        <Lit
+            slot="co"
+            client:only="lit"
+        />
+    </Card>
+</ExampleLayout>

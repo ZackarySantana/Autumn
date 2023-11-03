@@ -1,0 +1,57 @@
+---
+import Footer from "./Footer.astro";
+import Header from "./Header.astro";
+
+export interface Props {
+    title: string;
+    desc: string;
+    excludeMain?: boolean;
+    mainClasses?: string;
+}
+
+const { title, desc, mainClasses, excludeMain } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html
+    lang="en"
+    hx-ext="reset-on-success"
+>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width"
+        />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/favicon.svg"
+        />
+        <meta
+            name="generator"
+            content={Astro.generator}
+        />
+        <title>{title}</title>
+        <meta
+            name="description"
+            content={desc}
+        />
+        <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+        <!-- HTMX Extensions in general are not working... Idk why -->
+        <!-- <script src="/htmx_extensions.js"></script> -->
+    </head>
+    <body id="top">
+        <Header />
+
+        {excludeMain && <slot />}
+        {
+            !excludeMain && (
+                <main class={mainClasses}>
+                    <slot />
+                </main>
+            )
+        }
+        <Footer />
+    </body>
+</html>

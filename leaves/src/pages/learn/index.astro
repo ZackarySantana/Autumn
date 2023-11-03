@@ -1,0 +1,58 @@
+---
+import Links from "@components/interactive/links";
+import PageLayout from "@layouts/PageLayout.astro";
+import { Capitalize, GroupArrayByValues } from "@utils";
+import { getCollection } from "astro:content";
+
+const learn = await getCollection("learn");
+
+const ordered = learn.map((b) => ({
+    ...b,
+    data: {
+        ...b.data,
+        index: Number(b.id.split("-")[0].substring(b.id.indexOf("/") + 1)),
+    },
+}));
+
+const tags = ordered
+    .map((b) => b.data.tags)
+    .flat()
+    .filter((t) => t !== undefined) as string[];
+
+export const prerender = true;
+---
+
+<PageLayout
+    title="How's It - Articles"
+    desc="Understand and master the web. Or at least try :)"
+    excludeMain={true}
+>
+    <main>
+        <h1 class="text-3xl font-bold">Let's Learn!</h1>
+        <p>
+            These don't go in to <span class="italic">how</span> to implement things.
+            These go over the fundamentals which <span class="font-bold">
+                all
+            </span> web development, regardless of framework or library (with only
+            specific exceptions).
+        </p>
+    </main>
+    <Links
+        client:load
+        placeholder="Languages, React, etc"
+        tags={GroupArrayByValues([...tags])
+            .sort((a, b) => b.count - a.count)
+            .map((a) => ({
+                label: `${a.value} (${a.count})`,
+                value: a.value,
+            }))}
+        examples={ordered
+            .sort((b1, b2) => b1.data.index - b2.data.index)
+            .map((b, i) => ({
+                label: `${i + 1}. ${Capitalize(b.data.title)}`,
+                href: `/learn/${b.slug}`,
+                desc: b.data.description,
+                tags: b.data.tags,
+            }))}
+    />
+</PageLayout>

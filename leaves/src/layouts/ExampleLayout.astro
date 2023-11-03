@@ -1,0 +1,22 @@
+---
+import NetworkRequests from "@components/interactive/network_requests";
+import { Capitalize } from "@utils";
+import Layout from "./Layout.astro";
+
+const example = Astro.locals.example;
+const desc = Astro.locals.desc;
+---
+
+<Layout
+    title={"Example - " + Capitalize(example)}
+    desc={desc}
+    excludeMain={true}
+>
+    <main>
+        <slot name="header" />
+    </main>
+    <div class="mt-4 flex w-full flex-col items-center justify-center gap-4">
+        <slot />
+    </div>
+    <NetworkRequests client:load />
+</Layout>

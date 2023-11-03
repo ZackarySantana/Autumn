@@ -1,0 +1,27 @@
+<div>
+    <button
+        hx-post="/htmx/rust/counter?decrement"
+        hx-target="#htmx-counter-rust"
+        hx-swap="innerHTML"
+        hx-include="[name='counter_rust']"
+    >
+        -
+    </button>
+
+    <span
+        id="htmx-counter-rust"
+        hx-trigger="load"
+        hx-get="/htmx/rust/counter"
+        hx-target="this"
+        hx-swap="innerHTML"
+    ></span>
+
+    <button
+        hx-post="/htmx/rust/counter?increment"
+        hx-target="#htmx-counter-rust"
+        hx-swap="innerHTML"
+        hx-include="[name='counter_rust']"
+    >
+        +
+    </button>
+</div>
