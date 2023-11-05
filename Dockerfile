@@ -13,8 +13,7 @@ RUN npm install --production=false
 # Build the app (minifying too)
 FROM deps as build
 
-COPY astro.config.mjs svelte.config.js tailwind.config.cjs tsconfig.json ./
-COPY plugins plugins
+COPY astro.config.mjs tailwind.config.cjs tsconfig.json ./
 COPY public public
 COPY src src
 RUN npm run build

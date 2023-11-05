@@ -14,8 +14,6 @@ All contributions will be made via the PR tab! Create a branch/fork, code your s
 
 -   [Node](https://nodejs.org/en/) v19.3.0
 -   NPM v9.2.0 (Comes with Node)
--   [Golang](https://golang.org/) v1.20,3 (Backend examples)
--   [Rust](https://www.rust-lang.org/) v1.69.0 (Backend examples)
 
 ### Recommended
 
@@ -33,19 +31,11 @@ All contributions will be made via the PR tab! Create a branch/fork, code your s
 -   Additional:
     -   [Vanilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
     -   [React](https://reactjs.org/)
-    -   [Solid](https://www.solidjs.com/)
-    -   [Preact Hooks/Signals](https://preactjs.com/)
-    -   [Svelte](https://svelte.dev/)
-    -   [Vue](https://v3.vuejs.org/)
-    -   [htmx](https://htmx.org/)
-    -   [Alpine](https://alpinejs.dev/)
-    -   [Lit](https://lit.dev/)
 
 ### Backend:
 
 -   [Astro](https://astro.build/) - Main Framework
--   [Rust](https://www.rust-lang.org/) - Used in backend/htmx examples
--   [Go](https://golang.org/) - Used in backend/htmx examples
+-   [TypeScript](https://www.typescriptlang.org/docs/) - Main language
 
 ### Deployment
 
