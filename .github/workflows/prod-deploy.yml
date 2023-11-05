@@ -1,10 +1,8 @@
-name: Nebula deploy
+name: Prod deploy
 on:
     push:
         branches:
             - main
-        paths:
-            - "nebula/**"
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -14,9 +12,7 @@ jobs:
     deploy_to_production:
         name: Deploying to production
         runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./nebula
+
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -27,4 +23,4 @@ jobs:
             - name: Deploy to production
               run: flyctl deploy --remote-only
               env:
-                  FLY_API_TOKEN: ${{ secrets.NEBULA_FLY_DEPLOYMENT_PROD }}
+                  FLY_API_TOKEN: ${{ secrets.FLY_DEPLOYMENT_PROD }}
