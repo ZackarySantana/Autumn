@@ -1,3 +1,5 @@
+import type { APIRoute } from "astro";
+
 const data = [
     "How many bottles of beer on the wall for this trip?",
     "The best way to predict the future is to create it.",
