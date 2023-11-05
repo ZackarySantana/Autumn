@@ -42,7 +42,6 @@ module.exports = {
         "use-isnan": "warn",
         "require-atomic-updates": "warn",
         camelcase: "warn",
-        "capitalized-comments": "warn",
         "class-methods-use-this": "warn",
         complexity: ["warn", 7],
         curly: ["warn", "all"],
