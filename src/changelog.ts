@@ -1,68 +1,88 @@
-export const exampleChangelog = [
-    {
-        _id: "1",
-        githubOwner: "zackarysantana",
-        githubRepo: "autumn",
-        branch: "main",
-        displayName: "Autumn",
-        secretKey: "autumn-cl",
-        generated: [
-            [
-                "Current - 11/05/2023",
-                "Add a timeline",
-                "Add dates",
-                "Removed a bad feature",
-            ],
-            [
-                "11/04/2023 - 10/26/2023",
-                "Created this feature",
-                "That is going well",
-            ],
-            ["10/25/2023 - 10/18/2023", "NA"],
-        ],
-        week: new Date(),
-        commits: [],
-    },
-    {
-        _id: "2",
-        githubOwner: "zackarysantana",
-        githubRepo: "autumn",
-        branch: "main",
-        displayName: "How's It",
-        secretKey: "autumn-cl",
-        generated: [
-            ["11/05/2023 - Current", "Changed this and that", "Very cool"],
-            ["10/26/2023 - 11/04/2023", "NA"],
-            ["10/18/2023 - 10/25/2023", "This", "And", "that", "Changed"],
-        ],
-        week: new Date(),
-        commits: [],
-    },
-];
-
-export type Changelog = {
+export type Project = {
     _id: string;
-    githubOwner: string;
-    githubRepo: string;
-    branch: string;
     displayName: string;
-    secretKey: string;
-    generated: string[][];
-    week: Date;
-    commits: {
-        hash: string;
-        message: string;
-        prDescription: string;
+    github: {
+        owner: string;
+        repo: string;
+        branch: string;
+        key: string;
+    };
+    changelog: {
+        week: Date;
+        generated: string[];
+        commits: {
+            hash: string;
+            message: string;
+            prDescription: string;
+        }[];
     }[];
 };
 
-export function GetCurrentChangelog(locals: App.Locals, displayName?: string) {
-    const generated = locals.changelogs.find(
-        (c) => c.displayName === displayName,
-    );
+export const exampleChangelog = [
+    {
+        _id: "1",
+        displayName: "Autumn",
+        github: {
+            owner: "zackarysantana",
+            repo: "autumn",
+            branch: "main",
+            key: "autumn-cl",
+        },
+        changelog: [
+            {
+                week: new Date(),
+                generated: ["First change", "Second change"],
+                commits: [
+                    {
+                        hash: "1",
+                        message: "test",
+                        prDescription: "test",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        _id: "1",
+        displayName: "How's It",
+        github: {
+            owner: "zackarysantana",
+            repo: "howsit",
+            branch: "main",
+            key: "howsit",
+        },
+        changelog: [
+            {
+                week: new Date(),
+                generated: ["Crazy chnage", "yeah.."],
+                commits: [
+                    {
+                        hash: "1",
+                        message: "test",
+                        prDescription: "test",
+                    },
+                ],
+            },
+            {
+                week: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
+                generated: ["Crazy chnage", "yeah.."],
+                commits: [
+                    {
+                        hash: "1",
+                        message: "test",
+                        prDescription: "test",
+                    },
+                ],
+            },
+        ],
+    },
+] satisfies Project[];
 
-    if (!generated) {
+export function GetCurrentChangelog(locals: App.Locals, displayName?: string) {
+    const project = locals.projects.find((c) => c.displayName === displayName);
+
+    if (!project) {
         throw new Error("Page not found");
     }
-    return generated as Changelog;
+    return project as Project;
 }

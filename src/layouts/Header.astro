@@ -1,9 +1,9 @@
 ---
-const changelog = Astro.locals.changelog;
+const project = Astro.locals.project;
 
-const projects = Astro.locals.changelogs
+const projects = Astro.locals.projects
     .filter((cl, i, t) => t.length > 1)
-    .filter((cl) => cl.displayName !== changelog?.displayName)
+    .filter((cl) => cl.displayName !== project?.displayName)
     .map((cl) => ({
         label: cl.displayName,
         link: `/changelog/${cl.displayName}`,
@@ -13,7 +13,7 @@ const projects = Astro.locals.changelogs
 <header class="bg-primary-background flex w-full items-center gap-10 p-5">
     <div>
         <h1 class="text-3xl font-bold">
-            {changelog?.displayName ?? projects[0].label}
+            {project?.displayName ?? projects.at(0)?.label}
         </h1>
         <h2>Auto-changelog</h2>
     </div>

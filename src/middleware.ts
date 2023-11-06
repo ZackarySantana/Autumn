@@ -5,10 +5,10 @@ export const onRequest: MiddlewareResponseHandler = (
     { locals, url, redirect },
     next,
 ) => {
-    locals.changelogs = exampleChangelog;
+    locals.projects = exampleChangelog;
 
     if (url.pathname === "/") {
-        return redirect("/changelog/" + locals.changelogs[0].displayName, 302);
+        return redirect("/changelog/" + locals.projects[0].displayName, 302);
     }
 
     return next();

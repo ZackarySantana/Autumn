@@ -7,32 +7,42 @@
 
 declare namespace App {
     interface Locals {
-        changelogs: {
-            githubOwner: string;
-            githubRepo: string;
-            branch: string;
+        projects: {
+            _id: string;
             displayName: string;
-            secretKey: string;
-            generated: string[][];
-            week: Date;
-            commits: {
-                hash: string;
-                message: string;
-                prDescription: string;
+            github: {
+                owner: string;
+                repo: string;
+                branch: string;
+                key: string;
+            };
+            changelog: {
+                week: Date;
+                generated: string[];
+                commits: {
+                    hash: string;
+                    message: string;
+                    prDescription: string;
+                }[];
             }[];
         }[];
-        changelog?: {
-            githubOwner: string;
-            githubRepo: string;
-            branch: string;
+        project?: {
+            _id: string;
             displayName: string;
-            secretKey: string;
-            generated: string[][];
-            week: Date;
-            commits: {
-                hash: string;
-                message: string;
-                prDescription: string;
+            github: {
+                owner: string;
+                repo: string;
+                branch: string;
+                key: string;
+            };
+            changelog: {
+                week: Date;
+                generated: string[];
+                commits: {
+                    hash: string;
+                    message: string;
+                    prDescription: string;
+                }[];
             }[];
         };
     }
