@@ -38,7 +38,7 @@ const { title, desc, mainClasses, excludeMain } = Astro.props;
             content={desc}
         />
     </head>
-    <body id="top">
+    <body class="bg-mdb-background text-mdb-text-primary">
         <Header />
 
         {excludeMain && <slot />}
