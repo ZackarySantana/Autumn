@@ -14,7 +14,7 @@ RUN npm install --production=false
 FROM deps as build
 
 COPY astro.config.mjs tailwind.config.cjs tsconfig.json ./
-COPY public public
+# COPY public public # Uncomment when public has a file in it
 COPY src src
 RUN npm run build
 

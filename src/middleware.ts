@@ -1,7 +1,6 @@
 import type { MiddlewareResponseHandler } from "astro";
 
 export const onRequest: MiddlewareResponseHandler = ({ locals }, next) => {
-    if (!locals) {
-    }
+    locals.changelogs = [];
     return next();
 };
