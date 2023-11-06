@@ -1,5 +1,5 @@
 import type { MiddlewareResponseHandler } from "astro";
-import { exampleChangelog } from "./changelog";
+import { exampleChangelog } from "./lib/changelog";
 
 export const onRequest: MiddlewareResponseHandler = (
     { locals, url, redirect },

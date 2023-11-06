@@ -18,11 +18,11 @@ declare namespace App {
             };
             changelog: {
                 week: Date;
-                generated: string[];
                 commits: {
                     hash: string;
                     message: string;
                     prDescription: string;
+                    generated: string[];
                 }[];
             }[];
         }[];
@@ -37,11 +37,11 @@ declare namespace App {
             };
             changelog: {
                 week: Date;
-                generated: string[];
                 commits: {
                     hash: string;
                     message: string;
                     prDescription: string;
+                    generated: string[];
                 }[];
             }[];
         };
