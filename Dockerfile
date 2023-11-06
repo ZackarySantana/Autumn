@@ -34,6 +34,6 @@ RUN apt-get upgrade
 
 # Built files
 COPY --from=build /app/dist /app/dist
-COPY --from=build /app/public /app/public
+# COPY --from=build /app/public /app/public
 
 CMD ["npm", "run", "deploy"]
