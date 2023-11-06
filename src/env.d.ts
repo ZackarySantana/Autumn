@@ -13,7 +13,7 @@ declare namespace App {
             branch: string;
             displayName: string;
             secretKey: string;
-            generated: string[];
+            generated: string[][];
             week: Date;
             commits: {
                 hash: string;
@@ -21,5 +21,19 @@ declare namespace App {
                 prDescription: string;
             }[];
         }[];
+        changelog?: {
+            githubOwner: string;
+            githubRepo: string;
+            branch: string;
+            displayName: string;
+            secretKey: string;
+            generated: string[][];
+            week: Date;
+            commits: {
+                hash: string;
+                message: string;
+                prDescription: string;
+            }[];
+        };
     }
 }

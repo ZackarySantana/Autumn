@@ -1,5 +1,4 @@
 ---
-import { exampleChangelog } from "../changelog";
 import Footer from "./Footer.astro";
 import Header from "./Header.astro";
 
@@ -7,7 +6,6 @@ export interface Props {
     title: string;
     desc: string;
 }
-Astro.locals.changelogs = exampleChangelog;
 
 const { title, desc } = Astro.props;
 ---
