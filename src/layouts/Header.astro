@@ -1,9 +1,31 @@
 ---
+const projects = Astro.locals.changelogs
+    .filter((cl, i, t) => t.length > 1)
+    .map((cl) => ({
+        label: cl.displayName,
+        githubLink: `/${cl.displayName}`,
+    }));
 ---
 
-<header class="my-5 flex w-full flex-col items-center bg-primary-background">
-    <h1 class="font-bold">Autumn</h1>
-    <nav class="flex w-main justify-between lg:w-semimain">
-        <p>Simple nav</p>
+<header class="bg-primary-background flex w-full items-center gap-10 p-5">
+    <div>
+        <a
+            href="/"
+            class="text-3xl font-bold"
+        >
+            Autumn
+        </a>
+        <h2>Auto-changelog</h2>
+    </div>
+    <nav>
+        <ul class="flex gap-3">
+            {
+                projects.map((project) => (
+                    <li class="inline-block italic">
+                        <a href={project.githubLink}>{project.label}</a>
+                    </li>
+                ))
+            }
+        </ul>
     </nav>
 </header>
