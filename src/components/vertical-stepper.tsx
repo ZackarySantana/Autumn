@@ -3,7 +3,7 @@
 function StepContainer(props: { isFirst: boolean; children: React.ReactNode }) {
     return (
         <li
-            className={`relative flex gap-2 after:absolute after:left-[11px] after:top-[25px] after:h-[calc(100%-4px)] after:w-[2px] after:border-[1px] after:border-solid after:content-[''] [&:last-child]:after:hidden [.reversed>&]:after:left-[calc(100%-14px)] ${
+            className={`relative flex gap-2 after:absolute after:left-[11px] after:top-[25px] after:h-[calc(100%-3px)] after:w-[2px] after:border-[1px] after:border-solid after:content-[''] [&:last-child]:after:hidden ${
                 props.isFirst
                     ? "after:border-mdb-green"
                     : "after:border-mdb-text-primary"
