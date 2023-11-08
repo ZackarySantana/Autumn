@@ -35,7 +35,7 @@ const api = defineMiddleware(async ({ request, url }, next) => {
 
 const redirects = defineMiddleware(async ({ locals, url, redirect }, next) => {
     if (url.pathname.startsWith("/api/")) {
-        next();
+        return next();
     }
 
     const split = url.pathname.split("/");
