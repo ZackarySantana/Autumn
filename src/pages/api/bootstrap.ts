@@ -30,7 +30,21 @@ export const PUT: APIRoute = async ({ request }) => {
     } as Omit<Project, "_id">;
 
     const promises: Promise<void>[] = [];
-    for (const pr of data) {
+    data.sort((a, b) => {
+        if (a.merged_at > b.merged_at) {
+            return -1;
+        }
+        if (a.merged_at < b.merged_at) {
+            return 1;
+        }
+        return 0;
+    });
+    const lastPRs = [];
+    for (const i in data) {
+        if (lastPRs.length >= 5) {
+            lastPRs.shift();
+        }
+        const pr = data[i];
         const log = {
             url: pr.html_url,
             mergedAt: new Date(pr.merged_at),
@@ -40,7 +54,7 @@ export const PUT: APIRoute = async ({ request }) => {
             generated: [] as string[],
         };
         promises.push(
-            generateMessage(pr, data).then((messages) => {
+            generateMessage(pr, lastPRs).then((messages) => {
                 log.generated = messages;
             }),
         );
@@ -55,6 +69,7 @@ export const PUT: APIRoute = async ({ request }) => {
             projectInfo.changelog.push(changelog);
         }
         changelog.commits.push(log);
+        lastPRs.push(pr);
     }
 
     await Promise.all(promises);

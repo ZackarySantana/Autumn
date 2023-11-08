@@ -36,7 +36,9 @@ const { title, desc } = Astro.props;
             content={desc}
         />
     </head>
-    <body class="word-break min-w-[100%] max-w-[100%] px-4 sm:min-w-[50%]">
+    <body
+        class="min-w-[100%] max-w-[100%] px-4 word-break sm:min-w-[50%] sm:max-w-[70%]"
+    >
         <Header />
         <main>
             <slot />

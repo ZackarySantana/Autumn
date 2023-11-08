@@ -38,20 +38,22 @@ export default function VerticalStepper(props: { generated: string[][] }) {
                 >
                     <StepNumber>{index}</StepNumber>
                     <ul className="flex flex-col">
-                        {item.map((subitem, subindex) => {
-                            return (
-                                <li
-                                    key={subindex}
-                                    className={
-                                        subindex === 0
-                                            ? "text-lg font-bold"
-                                            : "ml-5 list-disc"
-                                    }
-                                >
-                                    {subitem}
-                                </li>
-                            );
-                        })}
+                        {item
+                            .filter((subitem) => subitem !== "")
+                            .map((subitem, subindex) => {
+                                return (
+                                    <li
+                                        key={subindex}
+                                        className={
+                                            subindex === 0
+                                                ? "text-lg font-bold"
+                                                : "ml-5 list-disc"
+                                        }
+                                    >
+                                        {subitem}
+                                    </li>
+                                );
+                            })}
                     </ul>
                 </StepContainer>
             ))}
