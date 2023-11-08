@@ -2,6 +2,7 @@
 /* eslint-disable max-lines-per-function */
 import type { APIRoute } from "astro";
 import { getFirstDayOfWeek, isSameDate, type Project } from "src/lib/changelog";
+import { client, database } from "src/lib/db";
 import { generateMessage, type PR } from "src/lib/generate";
 
 export const PUT: APIRoute = async ({ request }) => {
@@ -14,12 +15,10 @@ export const PUT: APIRoute = async ({ request }) => {
     }
 
     const resp = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=${prs}&base=${branch}&is=merged`,
-        {},
+        `https://api.github.com/repos/${owner}/${repo}/pulls?state=closed&sort=merged&direction=desc&per_page=${prs}&base=${branch}&is=merged`,
     );
     const data = (await resp.json()) as PR[];
     const projectInfo = {
-        _id: "project",
         displayName: displayName ?? repo,
         github: {
             owner,
@@ -28,11 +27,13 @@ export const PUT: APIRoute = async ({ request }) => {
             key: secretKey ?? "",
         },
         changelog: [],
-    } as Project;
+    } as Omit<Project, "_id">;
 
     const promises: Promise<void>[] = [];
     for (const pr of data) {
         const log = {
+            url: pr.html_url,
+            mergedAt: new Date(pr.merged_at),
             hash: pr.merge_commit_sha,
             message: pr.title,
             prDescription: pr.body,
@@ -58,7 +59,37 @@ export const PUT: APIRoute = async ({ request }) => {
 
     await Promise.all(promises);
 
-    console.log(projectInfo);
+    projectInfo.changelog.sort((a, b) => {
+        if (a.week > b.week) {
+            return -1;
+        }
+        if (a.week < b.week) {
+            return 1;
+        }
+        return 0;
+    });
+
+    projectInfo.changelog.forEach((cl) => {
+        cl.commits.sort((a, b) => {
+            if (a.mergedAt > b.mergedAt) {
+                return -1;
+            }
+            if (a.mergedAt < b.mergedAt) {
+                return 1;
+            }
+            return 0;
+        });
+    });
+
+    client.db(database).collection("projects").updateOne(
+        {
+            "github.repo": repo,
+            "github.owner": owner,
+            "github.branch": branch,
+        },
+        { $set: projectInfo },
+        { upsert: true },
+    );
 
     return new Response(null, {
         status: 200,

@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export type Project = {
-    _id: string;
+    _id: ObjectId;
     displayName: string;
     github: {
         owner: string;
@@ -10,6 +12,8 @@ export type Project = {
     changelog: {
         week: Date;
         commits: {
+            url: string;
+            mergedAt: Date;
             hash: string;
             message: string;
             prDescription: string;
@@ -20,7 +24,7 @@ export type Project = {
 
 export const exampleChangelog = [
     {
-        _id: "1",
+        _id: new ObjectId(),
         displayName: "Autumn",
         github: {
             owner: "zackarysantana",
@@ -33,6 +37,8 @@ export const exampleChangelog = [
                 week: new Date(),
                 commits: [
                     {
+                        url: "https://github.com",
+                        mergedAt: new Date(),
                         hash: "1",
                         message: "test",
                         prDescription: "test",
@@ -43,7 +49,7 @@ export const exampleChangelog = [
         ],
     },
     {
-        _id: "1",
+        _id: new ObjectId(),
         displayName: "How's It",
         github: {
             owner: "zackarysantana",
@@ -56,6 +62,8 @@ export const exampleChangelog = [
                 week: new Date(),
                 commits: [
                     {
+                        url: "https://github.com",
+                        mergedAt: new Date(),
                         hash: "1",
                         message: "test",
                         prDescription: "test",
@@ -67,6 +75,8 @@ export const exampleChangelog = [
                 week: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
                 commits: [
                     {
+                        url: "https://github.com",
+                        mergedAt: new Date(),
                         hash: "1",
                         message: "test",
                         prDescription: "test",
@@ -111,13 +121,4 @@ export function isSameDate(d1: Date, d2: Date) {
         d1.getMonth() === d2.getMonth() &&
         d1.getDate() === d2.getDate()
     );
-}
-
-export function GetCurrentChangelog(locals: App.Locals, displayName?: string) {
-    const project = locals.projects.find((c) => c.displayName === displayName);
-
-    if (!project) {
-        throw new Error("Page not found");
-    }
-    return project as Project;
 }

@@ -3,12 +3,12 @@
 // eslint-disable multiline-comment-style
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
-/// <reference path="./changelog" />
+/// <reference types="./lib/changelog" />
 
 declare namespace App {
     interface Locals {
         projects: {
-            _id: string;
+            _id: ObjectId;
             displayName: string;
             github: {
                 owner: string;
@@ -19,6 +19,8 @@ declare namespace App {
             changelog: {
                 week: Date;
                 commits: {
+                    url: string;
+                    mergedAt: Date;
                     hash: string;
                     message: string;
                     prDescription: string;
@@ -26,8 +28,8 @@ declare namespace App {
                 }[];
             }[];
         }[];
-        project?: {
-            _id: string;
+        project: {
+            _id: ObjectId;
             displayName: string;
             github: {
                 owner: string;
@@ -38,6 +40,8 @@ declare namespace App {
             changelog: {
                 week: Date;
                 commits: {
+                    url: string;
+                    mergedAt: Date;
                     hash: string;
                     message: string;
                     prDescription: string;

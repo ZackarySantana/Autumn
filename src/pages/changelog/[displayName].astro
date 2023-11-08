@@ -1,14 +1,9 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import VerticalStepper from "@components/vertical-stepper";
-import { GetCurrentChangelog, changelogDate } from "src/lib/changelog";
+import { changelogDate } from "src/lib/changelog";
 
-const { displayName } = Astro.params;
-
-const project = GetCurrentChangelog(Astro.locals, displayName);
-Astro.locals.project = project;
-
-const generated = project.changelog.map((cl) => [
+const generated = Astro.locals.project.changelog.map((cl) => [
     changelogDate(cl.week),
     ...cl.commits.flatMap((c) => c.generated),
 ]);
