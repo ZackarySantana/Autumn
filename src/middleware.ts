@@ -6,7 +6,6 @@ export const onRequest: MiddlewareResponseHandler = async (
     { locals, url, redirect },
     next,
 ) => {
-    console.log("BLOBING");
     locals.projects = await client
         .db(database)
         .collection<Project>("projects")

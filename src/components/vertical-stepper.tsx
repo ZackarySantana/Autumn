@@ -17,7 +17,7 @@ function StepContainer(props: { isFirst: boolean; children: React.ReactNode }) {
 function StepNumber(props: { children: number }) {
     return (
         <div
-            className={`flex h-[25px] w-[25px] items-center justify-center rounded-[50%] border-[2px] border-solid text-xs leading-[25px] ${
+            className={`flex h-[25px] w-[25px] shrink-0 items-center justify-center rounded-[50%] border-[2px] border-solid text-xs leading-[25px] ${
                 props.children === 0
                     ? "border-mdb-green text-mdb-green"
                     : "border-mdb-text-primary"

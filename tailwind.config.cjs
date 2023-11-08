@@ -1,6 +1,8 @@
 /* eslint-disable max-lines-per-function */
 /** @type {import('tailwindcss').Config} */
 
+import plugin from "tailwindcss/plugin";
+
 module.exports = {
     content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
     theme: {
@@ -13,4 +15,13 @@ module.exports = {
             },
         },
     },
+    plugins: [
+        plugin(function WordBreak({ addUtilities }) {
+            addUtilities({
+                ".word-break": {
+                    "word-break": "break-word",
+                },
+            });
+        }),
+    ],
 };

@@ -1,16 +1,13 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-// TODO: Better get env
-const clusterUrl = import.meta.env.MONGODB_CLUSTER_URL ?? "";
-const username = import.meta.env.MONGODB_USERNAME ?? "";
-const password = import.meta.env.MONGODB_PASSWORD ?? "";
-const database = import.meta.env.MONGODB_DATABASE ?? "";
-
-console.log("TESTING");
-console.log(clusterUrl);
-console.log(username);
-console.log(password);
-console.log(database);
+const clusterUrl =
+    import.meta.env.MONGODB_CLUSTER_URL ?? process.env.MONGODB_CLUSTER_URL;
+const username =
+    import.meta.env.MONGODB_USERNAME ?? process.env.MONGODB_USERNAME;
+const password =
+    import.meta.env.MONGODB_PASSWORD ?? process.env.MONGODB_PASSWORD;
+const database =
+    import.meta.env.MONGODB_DATABASE ?? process.env.MONGODB_DATABASE;
 
 const uri = clusterUrl
     .replace("<username>", username)
