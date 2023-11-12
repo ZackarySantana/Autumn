@@ -1,4 +1,11 @@
 import OpenAI from "openai";
+export type Message = {
+    changelog: string;
+    type: "Bug Fix" | "Improvement" | "Other";
+    ticket_id: string;
+    impact: 1 | 2 | 3 | 4;
+};
+
 export type PR = {
     url: string;
     html_url: string;
@@ -21,13 +28,10 @@ const openai = new OpenAI({
     organization: import.meta.env.OPENAI_ORG_ID ?? process.env.OPENAI_ORG_ID,
 });
 
-export function generateMessage(pr: PR, recentPRs: PR[]): Promise<string[]> {
-    let recentPRsText = recentPRs
+export function generateMessage(pr: PR, recentPRs: PR[]): Promise<Message> {
+    const recentPRsText = recentPRs
         .map((pr) => `\n${pr.title} - ${pr.body}`)
         .join("\n===\n");
-    if (recentPRsText.length > 500) {
-        recentPRsText = recentPRsText.slice(0, 500);
-    }
 
     return openai.chat.completions
         .create({
@@ -35,7 +39,7 @@ export function generateMessage(pr: PR, recentPRs: PR[]): Promise<string[]> {
                 {
                     role: "system",
                     content:
-                        "You will be provided a pull request title and body, as well as other recent pull request title's and body's. You will construct a changelog for the current pull request using the other pull requests as context. If the change is small, you can send nothing. If the change is large, you can send multiple lines. Do not include any ticket labels in the changelog. Use a professional tone that focuses on how users might be impacted by the change. Begin the changelog with a number 1-4 to indicate the type of change. 1: Bug Fix, 2: New Feature, 3: Improvement, 4: Other. If you do not know the type of change, use 4. Then a second number 1-4 to indicate the impact of the change. 1: Low, 2: Medium, 3: High, 4: Critical. If you do not know the impact of the change, use 1. For example a changelog might be: 1.4: Fixed a bug where the app would crash when opening a file.",
+                        "You are a product manager for a team that is responsible for writing a professional changelog. You are given one commit at a time and a list of recent previous commits, that may or may not be relevant to the one commit. You will write a 0-3 line changelog for the commit. The changelog should be as high-level as can be and help users adapt to the change in the system. As well, you will respond with the type of change of either 'Bug Fix', 'Improvement', 'Other'. And the impact of the change, which is 1-4 with 1 being most impactful. If you do not know the type of change or the impact, you will say 'Other' or 4. You will respond in JSON only, with properties 'changelog', 'type', 'ticket_id, and 'impact'. Where 'ticket_id' is the JIRA ticket id if it exists.",
                 },
                 {
                     role: "user",
@@ -45,6 +49,11 @@ export function generateMessage(pr: PR, recentPRs: PR[]): Promise<string[]> {
             model: "gpt-4-1106-preview",
         })
         .then((res) => {
-            return res.choices[0].message.content?.split("\n") ?? [];
+            return JSON.parse(
+                res.choices[0].message.content
+                    ?.split("\n")
+                    .filter((l) => !l.startsWith("```"))
+                    .join("\n") ?? "{}",
+            ) as Message;
         });
 }

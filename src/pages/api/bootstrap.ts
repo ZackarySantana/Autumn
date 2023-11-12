@@ -3,7 +3,7 @@
 import type { APIRoute } from "astro";
 import { getFirstDayOfWeek, isSameDate, type Project } from "src/lib/changelog";
 import { client, database } from "src/lib/db";
-import { generateMessage, type PR } from "src/lib/generate";
+import { generateMessage, type Message, type PR } from "src/lib/generate";
 
 export const PUT: APIRoute = async ({ request }) => {
     const { owner, repo, branch, prs, displayName, secretKey } =
@@ -51,7 +51,7 @@ export const PUT: APIRoute = async ({ request }) => {
             hash: pr.merge_commit_sha,
             message: pr.title,
             prDescription: pr.body,
-            generated: [] as string[],
+            generated: {} as Message,
         };
         promises.push(
             generateMessage(pr, lastPRs).then((messages) => {

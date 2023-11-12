@@ -1,5 +1,7 @@
 /** @jsxImportSource react */
 
+import { type Changelog, changelogDate } from "src/lib/changelog";
+
 function StepContainer(props: { isFirst: boolean; children: React.ReactNode }) {
     return (
         <li
@@ -28,32 +30,33 @@ function StepNumber(props: { children: number }) {
     );
 }
 
-export default function VerticalStepper(props: { generated: string[][] }) {
+export default function VerticalStepper({
+    changelog,
+}: {
+    changelog: Changelog[];
+}) {
     return (
         <ol className="flex flex-col gap-5">
-            {props.generated.map((item, index) => (
+            {changelog.map((item, index) => (
                 <StepContainer
                     key={index}
                     isFirst={index === 0}
                 >
                     <StepNumber>{index}</StepNumber>
                     <ul className="flex flex-col">
-                        {item
-                            .filter((subitem) => subitem !== "")
-                            .map((subitem, subindex) => {
-                                return (
-                                    <li
-                                        key={subindex}
-                                        className={
-                                            subindex === 0
-                                                ? "text-lg font-bold"
-                                                : "ml-5 list-disc"
-                                        }
-                                    >
-                                        {subitem}
-                                    </li>
-                                );
-                            })}
+                        <li className="text-lg font-bold">
+                            {changelogDate(item.week)}
+                        </li>
+                        {item.commits.map((subitem, subindex) => {
+                            return (
+                                <li
+                                    key={subindex}
+                                    className="ml-5 list-disc"
+                                >
+                                    {subitem.generated.changelog}
+                                </li>
+                            );
+                        })}
                     </ul>
                 </StepContainer>
             ))}

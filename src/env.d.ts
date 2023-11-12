@@ -24,7 +24,12 @@ declare namespace App {
                     hash: string;
                     message: string;
                     prDescription: string;
-                    generated: string[];
+                    generated: {
+                        changelog: string;
+                        type: "Bug Fix" | "Improvement" | "Other";
+                        ticket_id: string;
+                        impact: 1 | 2 | 3 | 4;
+                    };
                 }[];
             }[];
         }[];
@@ -45,7 +50,12 @@ declare namespace App {
                     hash: string;
                     message: string;
                     prDescription: string;
-                    generated: string[];
+                    generated: {
+                        changelog: string;
+                        type: "Bug Fix" | "Improvement" | "Other";
+                        ticket_id: string;
+                        impact: 1 | 2 | 3 | 4;
+                    };
                 }[];
             }[];
         };

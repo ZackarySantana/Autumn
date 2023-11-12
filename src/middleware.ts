@@ -23,6 +23,11 @@ const api = defineMiddleware(async ({ request, url }, next) => {
 
     if (basicAuth) {
         const token = basicAuth.split(" ")[1];
+        if (!token) {
+            return new Response("Auth required", {
+                status: 401,
+            });
+        }
         if (Buffer.from(token, "base64").toString() === secretToken) {
             return next();
         }

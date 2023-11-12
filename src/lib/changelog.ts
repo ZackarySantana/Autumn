@@ -1,4 +1,19 @@
 import { ObjectId } from "mongodb";
+import type { Message } from "./generate";
+
+export type CommitInformation = {
+    url: string;
+    mergedAt: Date;
+    hash: string;
+    message: string;
+    prDescription: string;
+    generated: Message;
+};
+
+export type Changelog = {
+    week: Date;
+    commits: CommitInformation[];
+};
 
 export type Project = {
     _id: ObjectId;
@@ -9,84 +24,8 @@ export type Project = {
         branch: string;
         key: string;
     };
-    changelog: {
-        week: Date;
-        commits: {
-            url: string;
-            mergedAt: Date;
-            hash: string;
-            message: string;
-            prDescription: string;
-            generated: string[];
-        }[];
-    }[];
+    changelog: Changelog[];
 };
-
-export const exampleChangelog = [
-    {
-        _id: new ObjectId(),
-        displayName: "Autumn",
-        github: {
-            owner: "zackarysantana",
-            repo: "autumn",
-            branch: "main",
-            key: "autumn-cl",
-        },
-        changelog: [
-            {
-                week: new Date(),
-                commits: [
-                    {
-                        url: "https://github.com",
-                        mergedAt: new Date(),
-                        hash: "1",
-                        message: "test",
-                        prDescription: "test",
-                        generated: ["First change", "Second change"],
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        _id: new ObjectId(),
-        displayName: "How's It",
-        github: {
-            owner: "zackarysantana",
-            repo: "howsit",
-            branch: "main",
-            key: "howsit",
-        },
-        changelog: [
-            {
-                week: new Date(),
-                commits: [
-                    {
-                        url: "https://github.com",
-                        mergedAt: new Date(),
-                        hash: "1",
-                        message: "test",
-                        prDescription: "test",
-                        generated: ["Crazy chnage", "yeah.."],
-                    },
-                ],
-            },
-            {
-                week: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
-                commits: [
-                    {
-                        url: "https://github.com",
-                        mergedAt: new Date(),
-                        hash: "1",
-                        message: "test",
-                        prDescription: "test",
-                        generated: ["Crazy chnage", "yeah.."],
-                    },
-                ],
-            },
-        ],
-    },
-] satisfies Project[];
 
 export function changelogDate(date: Date): string {
     const startOfWeek = new Date(
