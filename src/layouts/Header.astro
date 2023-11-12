@@ -1,31 +1,32 @@
 ---
 const project = Astro.locals.project;
 
-const projects = Astro.locals.projects
-    .filter((cl, i, t) => t.length > 1)
-    .filter((cl) => cl.displayName !== project?.displayName)
-    .map((cl) => ({
-        label: cl.displayName,
-        link: `/changelog/${cl.displayName}`,
-    }));
+// const projects = Astro.locals.projects
+//     .filter((cl, i, t) => t.length > 1)
+//     .filter((cl) => cl.displayName !== project?.displayName)
+//     .map((cl) => ({
+//         label: cl.displayName,
+//         link: `/changelog/${cl.displayName}`,
+//     }));
 ---
 
 <header class="bg-primary-background flex w-full items-center gap-10 p-5">
     <div>
         <h1 class="text-3xl font-bold">
-            {project?.displayName ?? projects.at(0)?.label}
+            <!-- {project?.displayName ?? projects.at(0)?.label} -->
+            {project?.displayName}
         </h1>
         <h2>Auto-changelog</h2>
     </div>
     <nav>
         <ul class="flex gap-3">
-            {
+            <!-- {
                 projects.map((project) => (
                     <li class="inline-block italic">
                         <a href={project.link}>{project.label}</a>
                     </li>
                 ))
-            }
+            } -->
         </ul>
     </nav>
 </header>

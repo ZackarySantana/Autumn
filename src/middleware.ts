@@ -4,15 +4,16 @@ import { defineMiddleware, sequence } from "astro/middleware";
 
 const secretToken = import.meta.env.SECRET_KEY ?? process.env.SECRET_KEY;
 
-const projects = defineMiddleware(async ({ locals }, next) => {
-    locals.projects = await client
+const redirectToDefaultProject = async (): Promise<string> => {
+    const someProject = await client
         .db(database)
         .collection<Project>("projects")
-        .find({})
-        .toArray();
-
-    return next();
-});
+        .findOne({});
+    if (!someProject) {
+        return "/unknown";
+    }
+    return "/changelog/" + someProject.displayName;
+};
 
 const api = defineMiddleware(async ({ request, url }, next) => {
     if (!url.pathname.startsWith("/api/")) {
@@ -39,19 +40,23 @@ const api = defineMiddleware(async ({ request, url }, next) => {
 });
 
 const redirects = defineMiddleware(async ({ locals, url, redirect }, next) => {
-    if (url.pathname.startsWith("/api/")) {
+    if (url.pathname.startsWith("/api/") || url.pathname === "/unknown") {
         return next();
     }
 
     const split = url.pathname.split("/");
 
     if (!url.pathname.startsWith("/changelog/") || split.length > 3) {
-        return redirect("/changelog/" + locals.projects[0].displayName, 302);
+        return redirect(await redirectToDefaultProject(), 302);
     }
 
-    const project = locals.projects.find((p) => p.displayName === split[2]);
+    const project = await client
+        .db(database)
+        .collection<Project>("projects")
+        .findOne({ displayName: split[2] });
+
     if (!project) {
-        return redirect("/changelog/" + locals.projects[0].displayName, 302);
+        return redirect(await redirectToDefaultProject(), 302);
     }
 
     locals.project = project;
@@ -59,4 +64,4 @@ const redirects = defineMiddleware(async ({ locals, url, redirect }, next) => {
     return next();
 });
 
-export const onRequest = sequence(projects, api, redirects);
+export const onRequest = sequence(api, redirects);
