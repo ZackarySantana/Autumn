@@ -1,6 +1,9 @@
+/* eslint-disable max-lines-per-function */
 /** @jsxImportSource react */
 
 import { type Changelog, changelogDate } from "src/lib/changelog";
+import Badge from "./badge";
+import { Link } from "lucide-react";
 
 function StepContainer(props: { isFirst: boolean; children: React.ReactNode }) {
     return (
@@ -43,7 +46,7 @@ export default function VerticalStepper({
                     isFirst={index === 0}
                 >
                     <StepNumber>{index}</StepNumber>
-                    <ul className="flex flex-col">
+                    <ul className="flex flex-col gap-5">
                         <li className="text-lg font-bold">
                             {changelogDate(item.week)}
                         </li>
@@ -51,9 +54,34 @@ export default function VerticalStepper({
                             return (
                                 <li
                                     key={subindex}
-                                    className="ml-5 list-disc"
+                                    className="5 flex flex-col justify-center gap-1"
                                 >
-                                    {subitem.generated.changelog}
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="text-lg font-bold">
+                                            {subitem.generated.ticket_id ===
+                                                "" ||
+                                            subitem.generated.ticket_id === null
+                                                ? "Unknown"
+                                                : subitem.generated.ticket_id}
+                                        </h3>
+                                        <a
+                                            href={subitem.url}
+                                            target="_blank"
+                                        >
+                                            <Link
+                                                height={20}
+                                                width={20}
+                                            />
+                                        </a>
+                                    </div>
+                                    <p className="leading-5">
+                                        {subitem.generated.changelog}
+                                    </p>
+                                    <div className="shrink-0">
+                                        <Badge type={subitem.generated.type}>
+                                            {subitem.generated.type}
+                                        </Badge>
+                                    </div>
                                 </li>
                             );
                         })}
