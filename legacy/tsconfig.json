@@ -1,0 +1,14 @@
+{
+    "extends": "astro/tsconfigs/strict",
+    "exclude": ["node_modules", "dist", "public"],
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "jsx": "preserve",
+        "jsxImportSource": "react",
+        "baseUrl": ".",
+        "paths": {
+            "@components/*": ["src/components/*"],
+            "@layouts/*": ["src/layouts/*"]
+        }
+    }
+}

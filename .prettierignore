@@ -1,4 +1,2 @@
-.github
-.solid
-dist
-node_modules
+convex/_generated/
+routeTree.gen.ts
