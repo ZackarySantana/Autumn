@@ -192,3 +192,17 @@ export const listCommits = query({
       .collect();
   },
 });
+
+export const listCommitsPublic = query({
+  args: { projectId: v.id('projects') },
+  handler: async (ctx, args) => {
+    const project = await ctx.db.get(args.projectId);
+    if (!project || !project.isPublic) return [];
+
+    return await ctx.db
+      .query('commits')
+      .withIndex('by_projectId_committedAt', (q) => q.eq('projectId', args.projectId))
+      .order('desc')
+      .collect();
+  },
+});

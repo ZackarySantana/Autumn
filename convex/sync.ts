@@ -49,19 +49,19 @@ async function generateSummary(message: string, authorLogin: string, apiKey: str
 export const syncProject = internalAction({
   args: { projectId: v.id('projects') },
   handler: async (ctx, args) => {
-    const apiKey = process.env.OPENROUTER_API_KEY;
-    const model = process.env.OPENROUTER_MODEL ?? 'openai/gpt-4o-mini';
-
-    if (!apiKey) {
-      throw new Error('OPENROUTER_API_KEY is not set');
-    }
-
     const project = await ctx.runQuery(internal.syncHelpers.getProjectInternal, {
       projectId: args.projectId,
     });
 
     if (!project) {
       throw new Error('Project not found');
+    }
+
+    const apiKey = project.openRouterApiKey ?? process.env.OPENROUTER_API_KEY;
+    const model = process.env.OPENROUTER_MODEL ?? 'openai/gpt-4o-mini';
+
+    if (!apiKey) {
+      throw new Error('OPENROUTER_API_KEY is not set (neither project-level nor env)');
     }
 
     const url = `https://api.github.com/repos/${project.owner}/${project.repo}/commits?sha=${encodeURIComponent(project.branch)}&per_page=100`;
@@ -124,6 +124,15 @@ function startOfTodayUtc(): number {
   return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
 }
 
+function startOfThisWeekUtc(): number {
+  const now = new Date();
+  const day = now.getUTCDay();
+  const diff = (day === 0 ? -6 : 1) - day; // Monday as start of week
+  const monday = new Date(now);
+  monday.setUTCDate(now.getUTCDate() + diff);
+  return Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate());
+}
+
 export const triggerSyncIfNeeded = action({
   args: { projectId: v.id('projects') },
   handler: async (ctx, args) => {
@@ -140,14 +149,50 @@ export const triggerSyncIfNeeded = action({
       throw new Error('Project not found');
     }
 
-    const todayStart = startOfTodayUtc();
+    const frequency = project.syncFrequency ?? 'on_visit';
     const lastSynced = project.lastSyncedAt ?? 0;
-    if (lastSynced >= todayStart) {
-      return; // Already synced today
+
+    let shouldSync = false;
+    if (frequency === 'on_visit') {
+      const todayStart = startOfTodayUtc();
+      shouldSync = lastSynced < todayStart;
+    } else if (frequency === 'daily') {
+      const todayStart = startOfTodayUtc();
+      shouldSync = lastSynced < todayStart;
+    } else if (frequency === 'weekly') {
+      const weekStart = startOfThisWeekUtc();
+      shouldSync = lastSynced < weekStart;
+    }
+
+    if (!shouldSync) {
+      return;
     }
 
     await ctx.scheduler.runAfter(0, internal.sync.syncProject, {
       projectId: args.projectId,
     });
+  },
+});
+
+export const runScheduledSync = internalAction({
+  args: {},
+  handler: async (ctx) => {
+    const projects = await ctx.runQuery(internal.syncHelpers.listProjectsForScheduledSync, {});
+
+    const todayStart = startOfTodayUtc();
+    const weekStart = startOfThisWeekUtc();
+
+    for (const project of projects) {
+      const lastSynced = project.lastSyncedAt ?? 0;
+      const frequency = project.syncFrequency ?? 'on_visit';
+      const shouldSync =
+        frequency === 'daily' ? lastSynced < todayStart : frequency === 'weekly' ? lastSynced < weekStart : false;
+
+      if (shouldSync) {
+        await ctx.scheduler.runAfter(0, internal.sync.syncProject, {
+          projectId: project._id,
+        });
+      }
+    }
   },
 });
