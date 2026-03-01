@@ -81,3 +81,18 @@ export const setSyncProgress = internalMutation({
     });
   },
 });
+
+export const listProjectsForScheduledSync = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const daily = await ctx.db
+      .query('projects')
+      .withIndex('by_syncFrequency', (q) => q.eq('syncFrequency', 'daily'))
+      .collect();
+    const weekly = await ctx.db
+      .query('projects')
+      .withIndex('by_syncFrequency', (q) => q.eq('syncFrequency', 'weekly'))
+      .collect();
+    return [...daily, ...weekly];
+  },
+});

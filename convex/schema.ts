@@ -17,7 +17,8 @@ export default defineSchema({
     openRouterApiKey: v.optional(v.string()),
   })
     .index('by_userId', ['userId'])
-    .index('by_owner_repo_branch', ['owner', 'repo', 'branch']),
+    .index('by_owner_repo_branch', ['owner', 'repo', 'branch'])
+    .index('by_syncFrequency', ['syncFrequency']),
 
   commits: defineTable({
     projectId: v.id('projects'),
