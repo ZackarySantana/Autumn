@@ -43,6 +43,23 @@ function ProjectChangelog() {
         <Link to="/" className="text-slate-600 hover:underline dark:text-slate-400">
           ← Home
         </Link>
+        <Link
+          to="/project/$projectId/settings"
+          params={{ projectId }}
+          className="text-slate-600 hover:underline dark:text-slate-400"
+        >
+          Settings
+        </Link>
+        {project.isPublic && (
+          <a
+            href={`/p/${projectId}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-slate-500 hover:underline"
+          >
+            Public changelog ↗
+          </a>
+        )}
       </div>
 
       <header>
